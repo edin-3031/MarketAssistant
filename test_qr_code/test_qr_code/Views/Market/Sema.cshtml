@@ -1,0 +1,8 @@
+﻿<script src="~/js/canvas.js"></script>
+@{
+    ViewData["Title"] = "Sema";
+
+    Sema tmp = (Sema)ViewData["sema"];
+}
+
+@Html.Raw(tmp.Sadrzaj)

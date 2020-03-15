@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "DodajSema";
+    Market m = (Market)ViewData["market"];
+}
+
+<h1>DodajSema</h1>
+
+<form action="/Market/DodajSnimiSema">
+    <label>Market</label>
+    <input readonly="readonly" value="@m.Naziv" name="market"/><br/>
+    <input hidden="hidden" value="@m.MarketID" name="marketId"/>
+    <label>Šema</label>
+    <input name="sema"/><br/>
+    <button type="submit">Snimi</button>
+</form>

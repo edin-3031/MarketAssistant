@@ -1,0 +1,147 @@
+﻿@using MarketAssistant.Models.VM;
+@model CoordinatesVM;
+@{
+    ViewData["Title"] = "DodajKoordinate";
+}
+
+<html>
+    <head>
+        <style>
+            #content {
+                height: 800px;
+                width: 1400px;
+                border: 1px solid black;
+                position:relative;
+                margin-left:-150px;
+            }
+            body, html{
+                height:100%;
+                width:100%;
+                margin:0%;
+            }
+        </style>
+    </head>
+    <body>
+
+
+        <div id="content"></div>
+
+        <script>
+
+            function tableCreate() {
+
+                var body = document.getElementById("content");
+                var tbl = document.createElement('table');
+
+                tbl.style.width = "1400px";
+                tbl.style.height = "800px";
+                tbl.setAttribute('border', '1');
+
+                var tbdy = document.createElement('tbody');
+
+                for (var i = 0; i < 50; i++) {
+                    var tr = document.createElement('tr');
+                    for (var j = 0; j < 50; j++) {
+                        var td = document.createElement('td');
+                        td.id = i + "-" + j;
+                        td.height = "10px";
+                        td.style = "border:0.5px solid red;"
+                        tr.appendChild(td);
+                    }
+                    tbdy.appendChild(tr);
+                }
+
+                tbl.appendChild(tbdy);
+                tbl.style.opacity = "0.2";
+                body.appendChild(tbl)
+            }
+
+            var niz;
+            var v;
+            var sema;
+            var markID;
+
+            $(document).ready(function () {
+
+                tableCreate();
+
+                var id = document.getElementsByTagName("input");
+                for (var i = 0; i < id.length; i++) {
+                    if (id[i].id == "idmarketa")
+                        v = id[i].value;
+                }
+
+                var btnId;
+                var button = document.getElementsByTagName("button");
+                for (var i = 0; i < button.length; i++) {
+                    if (button[i].id == "gotovo2") {
+                        btnId = button[i].id;
+                    }
+                }
+
+                var array = [];
+                var z;
+                var z2;
+
+                $("td").click(function () {
+                    $(this).css("background-color", "black");
+                    array.push(this.id);
+                    niz = array.toString();
+                    z2 = niz.split("-")
+                    document.getElementById("vrijednostiNiza").innerText = z2;
+                });
+
+                document.oncontextmenu = function (e) {
+                    var evt = new Object({ keyCode: 93 });
+                    stopEvent(e);
+                    keyboardUp(evt);
+                }
+
+                function stopEvent(event) {
+                    if (event.preventDefault != undefined)
+                        event.preventDefault();
+                    if (event.stopPropagation != undefined)
+                        event.stopPropagation();
+                }
+
+                $('td').contextmenu(function () {
+                    $(this).css("background-color", "white");
+
+                    for (var i = array.length; i >= 0; i--) {
+                        if (array[i] === this.id)
+                            array.splice(i, 1);
+                    }
+                });
+            });
+
+            $("#gotovo2").click(function () {
+
+                var rt = document.getElementById("content").innerHTML;
+
+                var niz2 = niz.split('-');
+
+                //var intTemp = niz2.toString().split(',');
+                //for (var i = 0; i < intTemp.length; i++)
+                //    alert(intTemp[i]);
+
+                niz = niz2.toString();
+
+                var test2 = { "coord": niz, "marketId": v, "Shema": rt };
+
+                $.ajax({
+                    url: "/Sema/SnimiKoordinate",
+                    type: "POST",
+                    data: test2,
+                    success: function (response) {
+                        $.get("/Sema/SnimiKoordinate?t=" + test2, function (t) {
+
+                            alert("Uspješno ste pohranili šemu");
+
+                        });
+                    }
+                });
+            });
+
+        </script>
+    </body>
+</html>

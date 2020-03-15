@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="~/js/canvas.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>*@
+    <style>
+        #myCanvas {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;">
+    </canvas>
+
+    <script>
+ c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        ctx.beginPath();
+        ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        $("#myCanvas").click(function(){
+
+            $("#myCanvas").css("background-color","blue");
+        });
+
+        $("#myCanvas").dblclick(function(){
+
+$("#myCanvas").css("background-color","red");
+});
+    </script>
+</body>
+</html>

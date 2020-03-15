@@ -1,0 +1,11 @@
+ASP .NET Core Web aplikacija sa sljedećim funkcionalnostima
+- QR Code za svaki pohranjeni market
+- Nakon skeniranja, prikaz mape marketa sa oznakama
+- Mogućnost traženja specifičnih proizvoda
+- Prilikom unosa proizvoda u tražilici, isticanje lokacije proizvoda
+- Prikazivanje detaljnih informacija o proizvodu
+- Sistem preporuke u slučaju da ne postoji traženi proizvod (prikazivanje identičnih proizvoda i lokacije)
+- Autentifikacija i validacija za admin korisnike
+- Za goste ne postoji autentifikacija (račun gosta)
+- Admini imaju mogućnost dodavanja, uklanjanja i izmjene podataka
+- Kreiranje nove šeme novog marketa koji se dodava putem UI-a

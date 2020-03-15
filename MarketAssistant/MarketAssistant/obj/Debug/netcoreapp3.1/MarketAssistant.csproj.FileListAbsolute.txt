@@ -1,0 +1,8 @@
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.MvcApplicationPartsAssemblyInfo.cache
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.AssemblyInfoInputs.cache
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.AssemblyInfo.cs
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.TagHelpers.input.cache
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.TagHelpers.output.cache
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.dll
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.pdb
+D:\Fakultet\Diplomski rad\MarketAssistant\MarketAssistant\obj\Debug\netcoreapp3.1\MarketAssistant.RazorCoreGenerate.cache

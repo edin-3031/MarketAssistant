@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            html, body{
+                margin: auto;
+                height:100%;
+                width: 100%;
+            }
+            #content,#gotovoDiv{
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border: 7px solid black;
+                margin: 10%;
+                left:-10%;
+            }
+            /* #action{
+                position: absolute;
+                 
+                height:100px;
+                width: 100px;
+                border:1px solid black;
+            }
+            #limits{
+                position: absolute;
+                top:100px;
+                left:100px;
+                height:300px;
+                width: 300px;
+                border:1px solid red;
+            } */
+        </style>
+        
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <!-- <link rel="stylesheet" href="/resources/demos/style.css" /> -->
+        <script>
+            function count(name){
+                alert($('#'+name).size());
+            }
+            $(document).ready(function(){
+                $("#action").draggable();
+                $("#action").resizable();
+                $("#action").mouseover(function(){
+                    $("#action").css("cursor","move");
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <script>
+            
+        </script>
+        <input type="text" id="oznaka_kvadrat"><button id="noviTekst_kvadrat">Spremi</button>
+        <input type="text" id="oznaka_krug"><button id="noviTekst_krug">Spremi</button>
+        <div id="menu_krug">
+            <ul>
+                <li><a id="test_krug">Briši</a></li>
+                <li><a id="oznaci_krug">Označi</a></li>
+            </ul>
+        </div>
+        <div id="menu_kvadrat">
+            <ul>
+                <li><a id="test_kvadrat">Briši</a></li>
+                <li><a id="oznaci_kvadrat">Označi</a></li>
+            </ul>
+        </div>
+        <script>
+            $("#menu_krug").hide();
+            $("#menu_kvadrat").hide();
+            $("#oznaka_krug").hide();
+            $("#noviTekst_krug").hide();
+            $("#oznaka_kvadrat").hide();
+            $("#noviTekst_kvadrat").hide();
+        </script>
+        <div id="action"></div>
+        <button id="novi">Novi kvadrat</button>
+        <button id="noviZaobljeni">Novi krug</button>
+        <button id="novaOznaka">Nova oznaka</button>
+        <input type="text" id="oznakaTekst">
+        <button id="dodaj">Snimi</button>
+        <div id="content">
+        </div>
+        <script>
+
+            $("#oznakaTekst").hide();
+            $("#dodaj").hide();
+            var vrijednost=0;
+
+            $("#novaOznaka").click(function(){
+                $("#oznakaTekst").show();
+                $("#dodaj").show();
+                
+                $("#dodaj").click(function(){
+
+                    var t=document.getElementById("oznakaTekst").value;
+
+                    ++vrijednost
+                    var identifikacija="action"+vrijednost;
+                    var stepen=15;
+                    var dvOznaka = document.createElement("div");
+                    dvOznaka.style.border="1px solid black";
+                    dvOznaka.style.height="10%";
+                    dvOznaka.style.transform="rotate(0deg)"; 
+                    dvOznaka.style.width="5%";
+                    dvOznaka.id="action"+(vrijednost);
+                    dvOznaka.ondblclick="changeColor("+action+vrijednost+")";
+                    dvOznaka.title="Double click for changing the background color"
+                    dvOznaka.style.position="absolute";
+                    dvOznaka.innerText=t;
+                    dvOznaka.align="center";
+                    dvOznaka.style.fontSize="20px";
+                    document.body.appendChild(dvOznaka);
+                    document.getElementById("content").appendChild(dvOznaka);
+                    $("#"+identifikacija).draggable();
+                    $("#"+identifikacija).resizable();
+
+                    $("#"+identifikacija).mouseover(function(){
+                        $("#"+identifikacija).css("cursor","move");
+                    });
+
+                    $("#oznakaTekst").hide();
+                    $("#dodaj").hide();
+
+
+                    $("#action"+vrijednost).dblclick(function(){
+
+                    var x=Math.floor(Math.random() * 256);
+                    var y=Math.floor(Math.random() * 256);
+                    var z=Math.floor(Math.random() * 256);
+                    var bgc="rgb("+x+","+y+","+z+")";
+
+                    $(this).css("background-color",bgc);
+                });
+
+                $("#"+identifikacija).mousedown(function(){
+                    if(event.which == 2)
+                        $(this).remove();
+                });
+                $("#"+identifikacija).contextmenu(function(){
+
+                    document.oncontextmenu = function(e){
+                    var evt = new Object({keyCode:93});
+                    stopEvent(e);
+                    keyboardUp(evt);
+                    }
+
+                    function stopEvent(event){
+                        if(event.preventDefault != undefined)
+                            event.preventDefault();
+                        if(event.stopPropagation != undefined)
+                            event.stopPropagation();
+                    }
+
+
+                    $(this).css("transform","rotate("+stepen+"deg)");
+                    stepen+=15;
+                    if(stepen==360)
+                        stepen=0;
+
+                //     $(this).css("transform","rotate("+stepen+"deg)");
+                //     stepen+=15;
+                //     if(stepen==360)
+                //         stepen=0;
+
+                    // $("#menu_krug").show();
+                    //     $("#test_krug").click(function(){
+
+                    //         $("#"+identifikacija).hide();
+                    //         $("#menu_krug").hide();
+                    // });
+
+                    // $("#oznaci_krug").click(function(){
+                    //     $("#oznaka_krug").show();
+                    //     $("#noviTekst_krug").show();
+                    //     $("#menu_krug").hide();
+
+                    // });
+
+                    // $("#noviTekst_krug").click(function(){
+                    //     $("#oznaka_krug").hide();
+                    //     $("#menu_krug").hide();
+                    //     $("#noviTekst_krug").hide();
+                    //     var tekst=document.getElementById("oznaka_krug").value;
+                    //     document.getElementById(identifikacija).innerText=tekst;
+                        
+
+                    // });
+                });
+                });
+                    
+            });
+
+            $("#novi").click(function(){
+                ++vrijednost;
+                var identifikacija="action"+vrijednost;
+                var stepen=15;
+                var dv = document.createElement("div");
+                dv.style.border="1px solid black";
+                dv.style.height="100px";
+                dv.style.transform="rotate(0deg)"; 
+                dv.style.width="100px";
+                dv.id="action"+(vrijednost);
+                dv.ondblclick="changeColor("+action+vrijednost+")";
+                dv.title="Double click for changing the background color"
+                dv.style.position="absolute";
+                dv.innerText="";
+                dv.align="center";
+                // document.body.appendChild(dv);
+                document.getElementById("content").appendChild(dv);
+
+                $("#"+identifikacija).draggable();
+                $("#"+identifikacija).resizable();
+                $("#"+identifikacija).mouseover(function(){
+                    $("#"+identifikacija).css("cursor","move");
+                });
+
+                $("#"+identifikacija).dblclick(function(){
+                    var x=Math.floor(Math.random() * 256);
+                    var y=Math.floor(Math.random() * 256);
+                    var z=Math.floor(Math.random() * 256);
+                    var bgc="rgb("+x+","+y+","+z+")";
+                    $(this).css("background-color",bgc);
+                });
+
+                $("#"+identifikacija).mousedown(function(){
+                    if(event.which == 2)
+                        $(this).remove();
+                });
+
+                // $("#"+identifikacija).mousedown(function(){
+                //     if(event.which == 3)
+                //         var deg=0;
+                //         deg+=15;
+                //         if(deg=360)
+                //             deg=0;
+                //         $(this).css("transform","rotate("+deg+"deg)");
+                // });
+
+                $("#"+identifikacija).contextmenu(function(){
+                    var ID=identifikacija;
+
+                    document.oncontextmenu = function(e){
+                    var evt = new Object({keyCode:93});
+                    stopEvent(e);
+                    keyboardUp(evt);
+                    }
+
+                    function stopEvent(event){
+                        if(event.preventDefault != undefined)
+                            event.preventDefault();
+                        if(event.stopPropagation != undefined)
+                            event.stopPropagation();
+                    }
+
+                    $(this).css("transform","rotate("+stepen+"deg)");
+                    stepen+=15;
+                    if(stepen==360)
+                        stepen=0;
+
+                    // $("#menu_kvadrat").show();
+                    // $("#test_kvadrat").click(function(){
+                    //     $("#"+ID).remove()
+                    //     $("#menu_kvadrat").hide();
+                    // });
+
+                    // $("#oznaci_kvadrat").click(function(){
+                    //     $("#oznaka_kvadrat").show();
+                    //     $("#noviTekst_kvadrat").show();
+                    //     $("#menu_kvadrat").hide();
+                    // });
+
+                    // $("#noviTekst_kvadrat").click(function(){
+                    //     $("#oznaka_kvadrat").hide();
+                    //     $("#menu_kvadrat").hide();
+                    //     $("#noviTekst_kvadrat").hide();
+                    //     var tekst=document.getElementById("oznaka_kvadrat").value;
+
+                    //     document.getElementById(ID).innerText=tekst;
+                    // });
+                });
+            });
+
+            $("#noviZaobljeni").click(function(){
+                var stepen=15;
+                ++vrijednost;
+                var dvr = document.createElement("div");
+                var identifikacija="action"+vrijednost;
+                dvr.style.border="1px solid black";
+                dvr.style.height="100px";
+                dvr.style.width="100px";
+                dvr.style.borderRadius="50%";
+                dvr.style.transform="rotate(0deg)"; 
+                dvr.id="action"+(vrijednost);
+                dvr.ondblclick="changeColor("+action+vrijednost+")";
+                dvr.title="Double click for changing the background color"
+                dvr.style.position="absolute";
+                dvr.innerText="";
+                dvr.align="center";
+                // document.body.appendChild(dvr);
+                document.getElementById("content").appendChild(dvr);
+
+                $("#"+identifikacija).draggable();
+                $("#"+identifikacija).resizable();
+                $("#"+identifikacija).mouseover(function(){
+                    $("#"+identifikacija).css("cursor","move");
+                });
+
+                $("#action"+vrijednost).dblclick(function(){
+
+                    var x=Math.floor(Math.random() * 256);
+                    var y=Math.floor(Math.random() * 256);
+                    var z=Math.floor(Math.random() * 256);
+                    var bgc="rgb("+x+","+y+","+z+")";
+
+                    $(this).css("background-color",bgc);
+                });
+
+                $("#"+identifikacija).mousedown(function(){
+                    if(event.which == 2)
+                        $(this).remove();
+                });
+                $("#"+identifikacija).contextmenu(function(){
+
+                    document.oncontextmenu = function(e){
+                    var evt = new Object({keyCode:93});
+                    stopEvent(e);
+                    keyboardUp(evt);
+                    }
+
+                    function stopEvent(event){
+                        if(event.preventDefault != undefined)
+                            event.preventDefault();
+                        if(event.stopPropagation != undefined)
+                            event.stopPropagation();
+                    }
+
+
+                    $(this).css("transform","rotate("+stepen+"deg)");
+                    stepen+=15;
+                    if(stepen==360)
+                        stepen=0;
+
+                //     $(this).css("transform","rotate("+stepen+"deg)");
+                //     stepen+=15;
+                //     if(stepen==360)
+                //         stepen=0;
+
+                    // $("#menu_krug").show();
+                    //     $("#test_krug").click(function(){
+
+                    //         $("#"+identifikacija).hide();
+                    //         $("#menu_krug").hide();
+                    // });
+
+                    // $("#oznaci_krug").click(function(){
+                    //     $("#oznaka_krug").show();
+                    //     $("#noviTekst_krug").show();
+                    //     $("#menu_krug").hide();
+
+                    // });
+
+                    // $("#noviTekst_krug").click(function(){
+                    //     $("#oznaka_krug").hide();
+                    //     $("#menu_krug").hide();
+                    //     $("#noviTekst_krug").hide();
+                    //     var tekst=document.getElementById("oznaka_krug").value;
+                    //     document.getElementById(identifikacija).innerText=tekst;
+                        
+
+                    // });
+                });
+            });
+                
+        </script>
+        <button id="gotovo">Snimi</button>
+        <script>
+            $("#gotovo").click(function(){
+
+                var t=document.getElementById("content").innerHTML;
+                
+                document.getElementById("gotovoDiv").innerHTML=t;
+            });
+        </script>
+        <div id="gotovoDiv"></div>
+    </body>
+</html>

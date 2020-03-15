@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            
+        </style>
+        
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    </head>
+    <body>
+        <script>
+            function tableCreate() {
+                var body = document.getElementsByTagName('body')[0];
+                var tbl = document.createElement('table');
+                tbl.style.width = "1400px";
+                tbl.setAttribute('border', '1');
+                var tbdy = document.createElement('tbody');
+                for (var i = 0; i < 50; i++) {
+                    var tr = document.createElement('tr');
+                    for (var j = 0; j < 50; j++) {
+                        var td = document.createElement('td');
+                        td.id=i+"-"+j;
+                        td.height="10px";
+                        td.style="border:1px solid red;"
+                        tr.appendChild(td);
+                    }
+                    tbdy.appendChild(tr);
+                }
+                tbl.appendChild(tbdy);
+                tbl.style.opacity = "0.5";
+                body.appendChild(tbl)
+            }
+            tableCreate();
+        </script>
+        <script type="text/javascript">
+
+            var array=[];
+
+            $('td').click(function(){
+                $(this).css("background-color","black");
+                // alert(this.id);
+                array.push(this.id);
+                // alert(this.className);
+                alert(array);
+                document.getElementById("vrijednostiNiza").innerText=array;
+            });
+
+            document.oncontextmenu = function(e){
+                 var evt = new Object({keyCode:93});
+                 stopEvent(e);
+                //  keyboardUp(evt);
+            }
+            function stopEvent(event){
+                 if(event.preventDefault != undefined)
+                  event.preventDefault();
+                 if(event.stopPropagation != undefined)
+                  event.stopPropagation();
+            }
+            $('td').contextmenu(function(){
+                $(this).css("background-color","white");
+                for(var i=array.length; i>=0; i--){
+                    if(array[i]===this.id)
+                        array.splice(i, 1);
+                }
+            });
+        </script>
+        <div id="vrijednostiNiza" style="float: right;"></div>
+    </body>
+</html>

@@ -1,0 +1,419 @@
+﻿@model MarketAssistant.VM.MarketSemaVM_lista;
+@{
+    ViewData["Title"] = "KreiranjeSeme";
+}
+<html>
+    <head>
+        <style>
+    
+            html, body {
+                /*margin: auto;*/
+                height: 100%;
+                width: 100%;
+            }
+    
+            #content {
+                position: absolute;
+                height: 800px;
+                width: 1400px;
+                border: 7px solid black;
+                margin-left: 10px;
+                left: 0px;
+            }
+            /* #action{
+                    position: absolute;
+    
+                    height:100px;
+                    width: 100px;
+                    border:1px solid black;
+                }
+                #limits{
+                    position: absolute;
+                    top:100px;
+                    left:100px;
+                    height:300px;
+                    width: 300px;
+                    border:1px solid red;
+                } */
+            .error {
+                border:2px solid red;
+            }
+            #kvadrat_upozorenje{
+                position:absolute;
+                display:block;
+                margin-left:320px;
+                background-color:indianred;
+                color:white;
+                font-size:110%;
+            }
+            #krug_upozorenje{
+                position:absolute;
+                display:block;
+                margin-left:420px;
+                background-color:indianred;
+                color:white;
+                font-size:110%;
+            }
+        </style>
+    
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    </head>
+    <body>
+        <input type="text" name="sema" hidden="hidden" id="sema" />
+        <input type="text" id="oznaka_kvadrat">
+        <button id="noviTekst_kvadrat">Spremi</button>
+        <input type="text" id="oznaka_krug">
+        <button id="noviTekst_krug">Spremi</button>
+
+        <script>
+
+            $("#menu_krug").hide();
+            $("#menu_kvadrat").hide();
+            $("#oznaka_krug").hide();
+            $("#noviTekst_krug").hide();
+            $("#oznaka_kvadrat").hide();
+            $("#noviTekst_kvadrat").hide();
+
+        </script>
+
+        <h1 align="center"> Kreiranje šeme</h1>
+
+        <div id="action"></div>
+
+        <div style="display: inline-block ">
+            <button class="btn btn-success" id="gotovo" style="margin-right:200px;">Snimi</button>
+        </div>
+
+        <div style="display:inline-block; margin-top:50px; margin-left:4%;" id="dugmad">
+
+            <div id="lista" style="display:inline-block; position:relative;">
+                <label><b>Market</b></label>
+                <select name="idMarket" id="idMarket">
+                    <option value="0">---Odaberite---</option>
+                    @foreach (var x in Model.lista)
+                    {
+                        <option value="@x.marketId">@x.naziv</option>
+                    }
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="novaOznaka">Novi kvadrat</button>
+            <input type="text" id="oznakaTekst_kvadrad" placeholder="Unesite oznaku"><span id="kvadrat_upozorenje"></span>
+            <button type="button" class="btn btn-success" id="dodaj_kvadrad">Dodaj</button>
+            <button type="button" class="btn btn-danger" id="ponisti_kvadrad">Poništi</button>
+            <button type="button" class="btn btn-primary" id="noviZaobljeni">Novi krug</button>
+            <input type="text" id="oznakaTekst_krug" placeholder="Unesite oznaku"><span id="krug_upozorenje"></span>
+            <button type="button" class="btn btn-success" id="dodaj_krug">Dodaj</button>
+            <button type="button" class="btn btn-danger" id="ponisti_krug">Poništi</button>
+            <button type="button" class="btn btn-info" id="pomoc" style="margin-left:5px; position:relative; float:right;">?</button>
+            <button type="button" class="btn btn-danger" id="close">X</button>
+
+        </div>
+
+        <div style="display:inline-block; margin-top:50px; margin-left:45%;" id="dugmad2">
+
+            <button type="submit" class="btn btn-success" id="gotovo2" style="position:relative; float:left;">Snimi</button>
+            <button type="button" class="btn btn-info" id="pomoc2" style="position:relative; margin-left:20px;">?</button>
+            <button type="button" class="btn btn-danger" id="close2" style="position:relative; margin-left:20px;">X</button>
+
+        </div>
+
+        <div id="slika_guide" style="display:block; height:400px; position:relative; margin:50px; right:350px;">
+            <img src="~/images/mouse_guide.jpg" style="height:450px;width:400px; display:inline-block; float:right; position:relative;" />
+        </div>
+
+        <div id="slika_guide2" style="display:block; height:400px; position:relative; margin:50px; right:350px;">
+            <img src="~/images/mouse_guide_coordinates.jpg" style="height:450px;width:400px; display:inline-block; float:right; position:relative;" />
+        </div>
+
+        <div style="margin-top:2%; margin-left:10%;" id="content"></div>
+
+        <script>
+
+            $(document).ready(function () {
+                $("#slika_guide").hide();
+                $("#slika_guide2").hide();
+                $("#close").hide();
+                $("#dugmad2").hide();
+            });
+
+            $("#pomoc").click(function () {
+                $("#slika_guide").show();
+                $("#close").show();
+                $("#pomoc").hide();
+            });
+
+            $("#close").click(function () {
+                $("#slika_guide").hide();
+                $("#close").hide();
+                $("#pomoc").show();
+            });
+
+            $("#pomoc2").click(function () {
+                $("#slika_guide2").show();
+                $("#close2").show();
+                $("#pomoc2").hide();
+            });
+
+            $("#close2").click(function () {
+                $("#slika_guide2").hide();
+                $("#close2").hide();
+                $("#pomoc2").show();
+            });
+
+            $("#ponisti_kvadrad").hide();
+            $("#ponisti_krug").hide();
+            $("#oznakaTekst_kvadrad").hide();
+            $("#oznakaTekst_krug").hide();
+            $("#dodaj_kvadrad").hide();
+            $("#dodaj_krug").hide();
+            var vrijednost = 0;
+
+            $("#novaOznaka").click(function () {
+                $("#oznakaTekst_kvadrad").show();
+                $("#dodaj_kvadrad").show();
+                $("#ponisti_kvadrad").show();
+
+                $("#oznakaTekst_krug").hide();
+                $("#dodaj_krug").hide();
+                $("#ponisti_krug").hide();
+                $("#ponisti_krug").hide();
+            });
+
+            $("#noviZaobljeni").click(function () {
+                $("#oznakaTekst_krug").show();
+                $("#dodaj_krug").show();
+                $("#ponisti_krug").show();
+
+                $("#oznakaTekst_kvadrad").hide();
+                $("#dodaj_kvadrad").hide();
+                $("#ponisti_kvadrad").hide();
+            });
+
+            $("#ponisti_kvadrad").click(function () {
+                $("#oznakaTekst_kvadrad").hide();
+                $("#dodaj_kvadrad").hide();
+                $("#ponisti_kvadrad").hide();
+                document.getElementById("kvadrat_upozorenje").innerText = "";
+                document.getElementById("oznakaTekst_kvadrad").classList.remove("error");
+            });
+
+            $("#ponisti_krug").click(function () {
+                $("#oznakaTekst_krug").hide();
+                $("#dodaj_krug").hide();
+                $("#ponisti_krug").hide();
+                document.getElementById("krug_upozorenje").innerText = "";
+                document.getElementById("oznakaTekst_krug").classList.remove("error");
+            });
+
+
+            $("#dodaj_kvadrad").click(function () {
+
+                var prazno = document.getElementById("oznakaTekst_kvadrad").value;
+
+                if (prazno == "" || prazno == null) {
+                    var tekst = document.getElementById("kvadrat_upozorenje");
+                    document.getElementById("oznakaTekst_kvadrad").classList.add("error");
+                    tekst.innerText = "Morate unijeti oznaku";
+                }
+
+                else {
+
+                    var tekst = document.getElementById("kvadrat_upozorenje");
+                    document.getElementById("oznakaTekst_kvadrad").classList.remove("error");
+                    tekst.innerText = "";
+
+                    var t = document.getElementById("oznakaTekst_kvadrad").value;
+
+                    ++vrijednost
+                    var identifikacija = "action" + vrijednost;
+                    var stepen = 15;
+                    var dvOznaka = document.createElement("div");
+                    dvOznaka.className = t;
+                    dvOznaka.style.border = "1px solid black";
+                    dvOznaka.style.height = "100px";
+                    dvOznaka.style.transform = "rotate(0deg)";
+                    dvOznaka.style.width = "100px";
+                    dvOznaka.id = "action" + (vrijednost);
+                    dvOznaka.ondblclick = "changeColor(" + action + vrijednost + ")";
+                    dvOznaka.style.position = "absolute";
+                    dvOznaka.innerText = t;
+                    dvOznaka.align = "center";
+                    dvOznaka.style.fontSize = "20px";
+                    document.body.appendChild(dvOznaka);
+                    $("#" + identifikacija).draggable();
+                    $("#" + identifikacija).resizable();
+                    document.getElementById("content").appendChild(dvOznaka);
+                    document.getElementById("oznakaTekst_kvadrad").value = null;
+
+                    $("#" + identifikacija).mouseover(function () {
+                        $("#" + identifikacija).css("cursor", "move");
+                    });
+
+                    $("#oznakaTekst_kvadrad").hide();
+                    $("#dodaj_kvadrad").hide();
+                    $("#ponisti_kvadrad").hide();
+
+                    $("#action" + vrijednost).dblclick(function () {
+
+                        var x = Math.floor(Math.random() * 256);
+                        var y = Math.floor(Math.random() * 256);
+                        var z = Math.floor(Math.random() * 256);
+                        var bgc = "rgb(" + x + "," + y + "," + z + ")";
+
+                        $(this).css("background-color", bgc);
+                    });
+
+                    $("#" + identifikacija).mousedown(function () {
+                        if (event.which == 2)
+                            $(this).remove();
+                    });
+
+                    $("#" + identifikacija).contextmenu(function () {
+
+                        document.oncontextmenu = function (e) {
+                            var evt = new Object({ keyCode: 93 });
+                            stopEvent(e);
+                            keyboardUp(evt);
+                        }
+
+                        function stopEvent(event) {
+                            if (event.preventDefault != undefined)
+                                event.preventDefault();
+                            if (event.stopPropagation != undefined)
+                                event.stopPropagation();
+                        }
+
+                        $(this).css("transform", "rotate(" + stepen + "deg)");
+                        stepen += 15;
+                        if (stepen == 360)
+                            stepen = 0;
+                    });
+                }
+            });
+
+            $("#dodaj_krug").click(function () {
+
+                var prazno = document.getElementById("oznakaTekst_krug").value;
+
+                if (prazno == "" || prazno == null) {
+                    var tekst = document.getElementById("krug_upozorenje");
+                    document.getElementById("oznakaTekst_krug").classList.add("error");
+                    tekst.innerText = "Morate unijeti oznaku";
+                }
+
+                else {
+                    document.getElementById("krug_upozorenje").innerText = "";
+                    var t2 = document.getElementById("oznakaTekst_krug").value;
+                    var stepen = 15;
+                    ++vrijednost;
+                    var dvr = document.createElement("div");
+                    var identifikacija = "action" + vrijednost;
+                    dvr.style.border = "1px solid black";
+                    dvr.style.height = "100px";
+                    dvr.style.width = "100px";
+                    dvr.style.borderRadius = "50%";
+                    dvr.style.transform = "rotate(0deg)";
+                    dvr.id = "action" + (vrijednost);
+                    dvr.innerText = t2;
+                    dvr.className = t2;
+                    dvr.ondblclick = "changeColor(" + action + vrijednost + ")";
+                    dvr.style.position = "absolute";
+                    dvr.align = "center";
+                    document.getElementById("content").appendChild(dvr);
+                    document.getElementById("oznakaTekst_krug").value = null;
+
+                    $("#" + identifikacija).draggable();
+                    $("#" + identifikacija).resizable();
+
+                    $("#" + identifikacija).mouseover(function () {
+                        $("#" + identifikacija).css("cursor", "move");
+                    });
+
+                    $("#action" + vrijednost).dblclick(function () {
+                        var x = Math.floor(Math.random() * 256);
+                        var y = Math.floor(Math.random() * 256);
+                        var z = Math.floor(Math.random() * 256);
+                        var bgc = "rgb(" + x + "," + y + "," + z + ")";
+
+                        $(this).css("background-color", bgc);
+                    });
+
+                    $("#" + identifikacija).mousedown(function () {
+                        if (event.which == 2)
+                            $(this).remove();
+                    });
+
+                    $("#" + identifikacija).contextmenu(function () {
+                        document.oncontextmenu = function (e) {
+                            var evt = new Object({ keyCode: 93 });
+                            stopEvent(e);
+                            keyboardUp(evt);
+                        }
+
+                        function stopEvent(event) {
+                            if (event.preventDefault != undefined)
+                                event.preventDefault();
+                            if (event.stopPropagation != undefined)
+                                event.stopPropagation();
+                        }
+
+                        $(this).css("transform", "rotate(" + stepen + "deg)");
+                        stepen += 15;
+                        if (stepen == 360)
+                            stepen = 0;
+                    });
+
+                    $("#oznakaTekst_krug").hide();
+                    $("#dodaj_krug").hide();
+                    $("#ponisti_krug").hide();
+                }
+            });
+
+        </script>
+
+        <script>
+
+            $("#gotovo").click(function () {
+
+                var t3 = document.getElementById("content").innerHTML;
+
+                var id = document.getElementById("idMarket").value;
+
+                var test = { "idMarket": id, "Shema": t3 };
+
+                var marketId = document.getElementById("idMarket").value;
+                document.getElementById("idmarketa").value = marketId;
+
+                $.ajax({
+                    url: "/Home/Index",
+                    type: "POST",
+                    data: test,
+                    success: function (response) {
+                        $.get("/Sema/DodajKoordinate?content2=" + test, function (t) {
+                            $("#box").html(t);
+                            $("#box").hide();
+                            document.getElementById("content").style.marginLeft = "-250px";
+                            $("#dugmad").hide();
+                            $("#gotovo").hide();
+                            $("#dugmad2").show();
+                            $("#close2").hide();
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <div style="height:100%; width:100%; position:relative;" id="box"></div>
+
+        <input hidden="hidden" id="idmarketa" />
+
+    </body>
+</html>
